@@ -1,113 +1,162 @@
-import Image from "next/image";
+"use client";
+import React from "react";
+import { color, motion } from "framer-motion";
+import { SparklesCore } from "../components/ui/sparkles";
+import { LampContainer } from "../components/ui/lamps";
+import Chart from 'react-apexcharts'
+import {Switch} from "@nextui-org/switch";
 
+var chartptions = {
+  series: [30], // Replace with your dynamic temperature value
+  options: {
+    chart: {
+      height: 250,
+      type: 'radialBar',
+      toolbar: {
+        show: false
+      }
+    },
+    plotOptions: {
+      radialBar: {
+        startAngle: -135,
+        endAngle: 225,
+        hollow: {
+          margin: 0,
+          size: '70%',
+          background: '',
+          image: undefined,
+          imageOffsetX: 0,
+          imageOffsetY: 0,
+          position: 'front',
+          dropShadow: {
+            enabled: true,
+            top: 3,
+            left: 0,
+            blur: 4,
+            opacity: 0.24
+          }
+        },
+        track: {
+          background: '#65f0c8',
+          strokeWidth: '50%', // Control the width of the background track
+          margin: 0, // margin is in pixels
+          dropShadow: {
+            enabled: true,
+            top: -3,
+            left: 0,
+            blur: 4,
+            opacity: 0.35
+          }
+        },
+        dataLabels: {
+          showOn: 'always',
+          name: {
+            offsetY: -10,
+            show: true,
+            color: '#ffffff',
+            fontSize: '17px'
+          },
+          value: {
+            formatter: function(val:any) {
+              return `${parseInt(val)}°C`;
+            },
+            color: '#ffffff',
+            fontSize: '16px',
+            show: true,
+          },
+          total: {
+            show: true,
+            label: 'Temperature',
+            color:"#000000",
+            formatter: function (w:any) {
+              return `${w.globals.seriesTotals[0]}°C`;
+            }
+          }
+        },
+        stroke: {
+          lineCap: 'round',
+          width: 55 // Control the width of the bar
+        },
+      }
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'light',
+        type: 'horizontal',
+        shadeIntensity: 0.5,
+        gradientToColors: ['#FF0000'], // End color (red)
+        inverseColors: false,
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100]
+      },
+      colors: ['#FFFF00'] // Start color (yellow)
+    },
+    stroke: {
+      lineCap: 'round'
+    },
+    labels: ['Temperature'],
+  }
+};
+
+
+
+const customGradient = {
+  background: `conic-gradient(from 0deg, yellow, red ${30}%)`
+};
 export default function Home() {
+ 
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+<div className="h-screen relative w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="w-full absolute inset-0 h-screen">
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="opaque"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+        />
+    
+        
+      </div>
+      {/* <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
+        Build great products
+      </h1> */}
+    <div className=" absolute w-[85vw] h-[85vh] bg-tran flex justify-between  ">
+      <div className=" w-[70%] h-full flex-col justify-center items-center ">
+        <div className="h-[60%]  w-full flex gap-4 justify-center items-center relative  ">
+         <div className=" tempchart  "> <Chart  options={chartptions.options} series={chartptions.series} type="radialBar" height={250}/>
+  
+     </div>
+         <div className="tempchart"><Chart  options={chartptions.options} series={chartptions.series} type="radialBar" height={250}/></div>
+        </div>
+        <div className=" h-[40%] flex items-center gap-4 w-full  justify-center ">
+          <div className=" w-[400px] h-[250px] bg-gray-950 flex flex-col justify-start items-between">
+            <div className=" w-full flex justify-center"> <img className=" w-[200px] h-[200px]" src="./monitor.png" alt="" /></div>
+           
+            <div className=" flex justify-between items-center px-4">
+              <h1>MY PC</h1>
+              <Switch defaultSelected aria-label="Automatic updates"/>
+            </div>
+          </div>
+          <div className=" w-[400px] h-[250px] bg-gray-950 flex flex-col justify-start items-between">
+            <div className=" w-full flex justify-center"> <img className=" w-[200px] h-[200px]" src="./lamp.png" alt="" /></div>
+           
+            <div className=" flex justify-between items-center px-4">
+              <h1>MY PC</h1>
+              <Switch defaultSelected aria-label="Automatic updates"/>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className=" w-[30%] h-full bg-slate-950 rounded-md  ">
+        <h1>hello</h1>
       </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </div>
+    </div>
   );
 }

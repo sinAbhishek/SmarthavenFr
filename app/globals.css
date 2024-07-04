@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+.tempchart{
+  background: rgb(94,89,89);
+background: radial-gradient(circle, rgba(16, 47, 94, 0.856) 10%, rgba(0,0,0,1) 100%);
+}
