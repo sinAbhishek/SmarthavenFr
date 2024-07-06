@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { color, motion } from "framer-motion";
-import { SparklesCore } from "../components/ui/sparkles";
-import { LampContainer } from "../components/ui/lamps";
-import Chart from "react-apexcharts";
+// import Chart from "react-apexcharts";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { Switch } from "@nextui-org/switch";
 import { Dropdown } from "flowbite-react";
 import InputLabel from "@mui/material/InputLabel";
@@ -16,7 +16,7 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-var chartptions = {
+var chartptions: any = {
   series: [30], // Replace with your dynamic temperature value
   options: {
     chart: {
@@ -111,7 +111,7 @@ var chartptions = {
   },
 };
 
-var humidityoptions = {
+var humidityoptions: any = {
   series: [90], // Replace with your dynamic temperature value
   options: {
     chart: {
@@ -212,14 +212,20 @@ const customGradient = {
 
 export default function Home() {
   const [age, setAge] = React.useState("");
-  const [devicedetails, setdevicedetails] = useState([
+  const [devicedetails, setdevicedetails] = useState<any>([
     { Desktop: { starttime: "7:30:00 A.M", endtime: "6:30:00 P.M" } },
     { Lamp: { starttime: "7:30:00 A.M", endtime: "6:30:00 P.M" } },
   ]);
   const [starttime, setstarttime] = useState("");
-  const [selecteddevice, setselecteddevice] = useState("");
-  const [currentdevice, setcurrentdevice] = useState([]);
+  const [selecteddevice, setselecteddevice] = useState<any>("");
+  const [currentdevice, setcurrentdevice] = useState<any>([]);
   const [endtime, setendtime] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const handleChange = (event: any) => {
     event.preventDefault();
     console.log(event.target.value);
@@ -245,7 +251,7 @@ export default function Home() {
   };
   const changetime = () => {
     let currdevice = "";
-    const updateddetails = devicedetails.map((c) => {
+    const updateddetails = devicedetails.map((c: any) => {
       if (c[selecteddevice]) {
         starttime.length !== 0 && (c[selecteddevice].starttime = starttime);
         endtime.length !== 0 && (c[selecteddevice].endtime = endtime);
@@ -265,12 +271,15 @@ export default function Home() {
     console.log(selecteddevice);
     if (selecteddevice.length !== 0) {
       const currdevice = devicedetails.filter(
-        (c) => c[selecteddevice] !== undefined
+        (c: any) => c[selecteddevice] !== undefined
       );
       console.log(currdevice);
       setcurrentdevice(currdevice[0][selecteddevice]);
     }
   }, [selecteddevice]);
+  if (!isClient) {
+    return null; // or a fallback component
+  }
   return (
     <div className="h-screen relative w-full bg-[#00010a] flex flex-col items-center justify-center overflow-hidden rounded-md">
       {/* <div className="w-full absolute inset-0 h-screen">
