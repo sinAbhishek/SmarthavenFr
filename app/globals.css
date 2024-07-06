@@ -32,6 +32,18 @@ body {
   }
 }
 .tempchart{
-  background: rgb(94,89,89);
-background: radial-gradient(circle, rgba(16, 47, 94, 0.856) 10%, rgba(0,0,0,1) 100%);
+  background: rgb(44,106,227);
+  background: radial-gradient(circle, rgb(5, 23, 63) 50%, rgba(13,13,13,1) 100%);
+}
+.tempchartt{
+  background: rgb(44,106,227);
+  background: radial-gradient(circle, rgb(40, 2, 6) 20%, rgba(13,13,13,1) 100%);
+}
+
+.MuiOutlinedInput-root{
+color: white !important;
+
+}
+.MuiOutlinedInput-notchedOutline {
+  color: white !important;
 }
