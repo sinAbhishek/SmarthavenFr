@@ -47,3 +47,60 @@ color: white !important;
 .MuiOutlinedInput-notchedOutline {
   color: white !important;
 }
+.day{
+  background: rgb(255,255,255);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 50%, rgba(240,193,126,1)100%);
+}
+.night{
+  background: rgb(51,51,51);
+  background: linear-gradient(0deg, rgba(51,51,51,1) 0%, rgba(0,0,0,1) 100%);
+}
+.devices{
+  box-shadow: rgba(0, 0, 0, 0.545) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+}
+.cards{
+  background: rgba(22, 22, 22, 0.807);
+background: linear-gradient(0deg, rgba(26,26,26,1) 5%, rgba(0,0,0,1) 90%, rgba(0,0,0,1) 100%);
+
+
+}
+.daycard{
+  background: rgb(235,231,231);
+  background: linear-gradient(0deg, rgb(211, 209, 209) 10%, rgba(255,255,255,1) 95%);
+}
+.nightcard{
+  background: rgba(22, 22, 22, 0.807);
+background: linear-gradient(0deg, rgba(26,26,26,1) 5%, rgba(0,0,0,1) 90%, rgba(0,0,0,1) 100%);
+}
+.mobile_device{
+  /* box-shadow: rgba(0, 0, 0, 0.545) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px; */
+  background-color: black;
+
+  
+}
+@media only screen and (max-width:1050px) {
+  .cards{
+    width: 150px;
+    height: 150px;
+  }
+  .devices{
+    min-width:450px;
+   height: 75%;
+  }
+}
+@media only screen and (max-width:850px) {
+
+  .devices{
+    display: none;
+  }
+}
+.show{
+ 
+  transform: translateY(0%);
+  transition: 0.5s ease-in-out;
+}
+.hide{
+  transform: translateY(100%);
+
+  transition: 0.5s ease-in-out;
+}

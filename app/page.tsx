@@ -1,468 +1,456 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { color, motion } from "framer-motion";
-// import Chart from "react-apexcharts";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import {
+  delay,
+  useAnimate,
+  usePresence,
+  stagger,
+  useTransform,
+} from "framer-motion";
 import { Switch } from "@nextui-org/switch";
-import { Dropdown } from "flowbite-react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Box } from "@mui/material";
-import dayjs from "dayjs";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-var chartptions: any = {
-  series: [30], // Replace with your dynamic temperature value
-  options: {
-    chart: {
-      height: 250,
-      type: "radialBar",
-      toolbar: {
-        show: false,
+import axios from "axios";
+import Starfield from "@/components/Starfield";
+import { motion } from "framer-motion";
+import { styled } from "@mui/material/styles";
+import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
+import FormGroup from "@mui/material/FormGroup";
+import ComputerIcon from "@mui/icons-material/Computer";
+import { PiFanFill } from "react-icons/pi";
+import DevicesIcon from "@mui/icons-material/Devices";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import WaterDropIcon from "@mui/icons-material/WaterDrop";
+import SwitchMain, { SwitchProps } from "@mui/material/Switch";
+import Stack from "@mui/material/Stack";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+const IOSSwitch = styled((props: SwitchProps) => (
+  <SwitchMain
+    focusVisibleClassName=".Mui-focusVisible"
+    disableRipple
+    {...props}
+  />
+))(({ theme }) => ({
+  width: 52,
+  height: 26,
+  padding: 0,
+  "& .MuiSwitch-switchBase": {
+    padding: 0,
+    margin: 2,
+    color: "#000000",
+    transitionDuration: "300ms",
+    "&.Mui-checked": {
+      transform: "translateX(25px)",
+      color: "#ffffff",
+      "& + .MuiSwitch-track": {
+        backgroundColor: theme.palette.mode === "dark" ? "#000000" : "#000000",
+        opacity: 1,
+        border: 0,
+      },
+      "&.Mui-disabled + .MuiSwitch-track": {
+        opacity: 0.5,
       },
     },
-    plotOptions: {
-      radialBar: {
-        startAngle: -135,
-        endAngle: 225,
-        hollow: {
-          margin: 0,
-          size: "70%",
-          background: "",
-          image: undefined,
-          imageOffsetX: 0,
-          imageOffsetY: 0,
-          position: "front",
-          dropShadow: {
-            enabled: true,
-            top: 3,
-            left: 0,
-            blur: 4,
-            opacity: 0.24,
-          },
-        },
-        track: {
-          background: "#65f0c8",
-          strokeWidth: "50%", // Control the width of the background track
-          margin: 0, // margin is in pixels
-          dropShadow: {
-            enabled: true,
-            top: -3,
-            left: 0,
-            blur: 4,
-            opacity: 0.35,
-          },
-        },
-        dataLabels: {
-          showOn: "always",
-          name: {
-            offsetY: -10,
-            show: true,
-            color: "#ffffff",
-            fontSize: "17px",
-          },
-          value: {
-            formatter: function (val: any) {
-              return `${parseInt(val)}°C`;
-            },
-            color: "#ffffff",
-            fontSize: "16px",
-            show: true,
-          },
-          total: {
-            show: true,
-            label: "Temperature",
-            color: "#ffffff",
-            fontSize: "13px",
-            formatter: function (w: any) {
-              return `${w.globals.seriesTotals[0]}°C`;
-            },
-          },
-        },
-        stroke: {
-          lineCap: "round",
-          width: 55, // Control the width of the bar
-        },
-      },
+    "&.Mui-focusVisible .MuiSwitch-thumb": {
+      color: "#c92492",
+      border: "6px solid #c92492",
     },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shade: "light",
-        type: "horizontal",
-        shadeIntensity: 0.5,
-        gradientToColors: ["#FF0000"], // End color (red)
-        inverseColors: false,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 100],
-      },
-      colors: ["#FFFF00"], // Start color (yellow)
+    "&.Mui-disabled": {
+      color: "#c92492",
     },
-    stroke: {
-      lineCap: "round",
+    "&.Mui-disabled .MuiSwitch-thumb": {
+      color: theme.palette.mode === "light" ? "#ffffff" : "#000000",
     },
-    labels: ["Temperature"],
+    "&.Mui-disabled + .MuiSwitch-track": {
+      opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+    },
   },
-};
-
-var humidityoptions: any = {
-  series: [90], // Replace with your dynamic temperature value
-  options: {
-    chart: {
-      height: 250,
-      type: "radialBar",
-      toolbar: {
-        show: false,
-      },
-    },
-    plotOptions: {
-      radialBar: {
-        startAngle: -135,
-        endAngle: 225,
-        hollow: {
-          margin: 0,
-          size: "70%",
-          background: "",
-          image: undefined,
-          imageOffsetX: 0,
-          imageOffsetY: 0,
-          position: "front",
-          dropShadow: {
-            enabled: true,
-            top: 3,
-            left: 0,
-            blur: 4,
-            opacity: 0.24,
-          },
-        },
-        track: {
-          background: "#65f0c8",
-          strokeWidth: "50%", // Control the width of the background track
-          margin: 0, // margin is in pixels
-          dropShadow: {
-            enabled: true,
-            top: -3,
-            left: 0,
-            blur: 4,
-            opacity: 0.35,
-          },
-        },
-        dataLabels: {
-          showOn: "always",
-          name: {
-            offsetY: -10,
-            show: true,
-            color: "#ffffff",
-            fontSize: "10px",
-          },
-          value: {
-            formatter: function (val: any) {
-              return `${parseInt(val)}°C`;
-            },
-            color: "#ffffff",
-            fontSize: "16px",
-            show: true,
-          },
-          total: {
-            show: true,
-            label: "Humidity",
-            color: "#ffffff",
-            fontSize: "13px",
-            formatter: function (w: any) {
-              return `${w.globals.seriesTotals[0]}%`;
-            },
-          },
-        },
-        stroke: {
-          lineCap: "round",
-          width: 55, // Control the width of the bar
-        },
-      },
-    },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shade: "light",
-        type: "horizontal",
-        shadeIntensity: 0.5,
-        gradientToColors: ["#0c28f7"], // End color (red)
-        inverseColors: false,
-        opacityFrom: 1,
-        opacityTo: 1,
-        stops: [0, 100],
-      },
-      colors: ["#34e5eb"], // Start color (yellow)
-    },
-    stroke: {
-      lineCap: "round",
-    },
-    labels: ["Humidity"],
+  "& .MuiSwitch-thumb": {
+    boxSizing: "border-box",
+    width: 22,
+    height: 22,
   },
-};
+  "& .MuiSwitch-track": {
+    borderRadius: 26 / 2,
+    color: "#c92492",
+    backgroundColor: theme.palette.mode === "light" ? "#ffffff" : "#ffffff",
+    opacity: 1,
+    transition: theme.transitions.create(["background-color"], {
+      duration: 500,
+    }),
+  },
+}));
 
-const customGradient = {
-  background: `conic-gradient(from 0deg, yellow, red ${30}%)`,
-};
-
-export default function Home() {
-  const [age, setAge] = React.useState("");
-  const [devicedetails, setdevicedetails] = useState<any>([
-    { Desktop: { starttime: "7:30:00 A.M", endtime: "6:30:00 P.M" } },
-    { Lamp: { starttime: "7:30:00 A.M", endtime: "6:30:00 P.M" } },
-  ]);
-  const [starttime, setstarttime] = useState("");
-  const [selecteddevice, setselecteddevice] = useState<any>("");
-  const [currentdevice, setcurrentdevice] = useState<any>([]);
-  const [endtime, setendtime] = useState("");
-  const [isClient, setIsClient] = useState(false);
-
+const Iot = () => {
+  const [phase, setphase] = useState<boolean>(true);
+  const [scope, animate] = useAnimate();
+  const [scopesec, animatesec] = useAnimate();
+  const [scopen, animaten] = useAnimate();
+  const [scopesecn, animatesecn] = useAnimate();
+  const [scopeMoon, animateMoon] = useAnimate();
+  const [scopeSun, animateSun] = useAnimate();
+  const [show, setshow] = useState(false);
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const handleChange = (event: any) => {
-    event.preventDefault();
-    console.log(event.target.value);
-    setselecteddevice(event.target.value);
-  };
-  const handlestarttime = (e: any) => {
-    console.log(e);
-    const h = e.$H;
-    const m = e.$m;
-    const time = `${h}:${m}`;
-    console.log(time);
-    const date = new Date(e.$d);
-    setstarttime(date.toLocaleTimeString());
-  };
-  const handleendtime = (e: any) => {
-    console.log(e);
-    const h = e.$H;
-    const m = e.$m;
-    const time = `${h}:${m}`;
-    console.log(time);
-    const date = new Date(e.$d);
-    setendtime(date.toLocaleTimeString());
-  };
-  const changetime = () => {
-    let currdevice = "";
-    const updateddetails = devicedetails.map((c: any) => {
-      if (c[selecteddevice]) {
-        starttime.length !== 0 && (c[selecteddevice].starttime = starttime);
-        endtime.length !== 0 && (c[selecteddevice].endtime = endtime);
-        currdevice = c;
-        return c;
-      }
-      return c;
-    });
-    console.log(updateddetails);
-    setdevicedetails(updateddetails);
-    console.log(currdevice);
-    setcurrentdevice(currdevice[selecteddevice]);
-    setstarttime("");
-    setendtime("");
-  };
-  useEffect(() => {
-    console.log(selecteddevice);
-    if (selecteddevice.length !== 0) {
-      const currdevice = devicedetails.filter(
-        (c: any) => c[selecteddevice] !== undefined
-      );
-      console.log(currdevice);
-      setcurrentdevice(currdevice[0][selecteddevice]);
+    switchon();
+    lightcontrol();
+  }, [phase]);
+  const lightcontrol = async () => {
+    if (phase) {
+      const res = await axios.get("https://awsiot.onrender.com/on");
+      console.log(res);
+    } else {
+      const res = await axios.get("https://awsiot.onrender.com/off");
+      console.log(res);
     }
-  }, [selecteddevice]);
-  if (!isClient) {
-    return null; // or a fallback component
-  }
+  };
+  const switchon = async () => {
+    if (!phase) {
+      animate(
+        scope.current,
+        { rotate: 0, x: 0, opacity: 1 },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+      animate(
+        scopesec.current,
+        { rotate: 0, x: 0, opacity: 1 },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+      animate(
+        scopen.current,
+        { rotate: 0, x: "-100vw", opacity: 0 },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+      animate(
+        scopesecn.current,
+        { rotate: 0, x: "100vw", opacity: 0 },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+      animate(
+        scopeSun.current,
+        { opacity: 0, y: "100vh" },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+      animate(
+        scopeMoon.current,
+        { opacity: 1, y: 0 },
+        { type: "spring", duration: 2, stiffness: 40 }
+      );
+    } else {
+      animate(
+        scopen.current,
+        { rotate: 0, x: 0, opacity: 1 },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+      animate(
+        scopesecn.current,
+        { rotate: 0, x: 0, opacity: 1 },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+      animate(
+        scope.current,
+        { rotate: 0, x: "-100vw", opacity: 0 },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+      animate(
+        scopesec.current,
+        { rotate: 0, x: "100vw", opacity: 0 },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+      animate(
+        scopeSun.current,
+        { opacity: 1, y: 0 },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+      animate(
+        scopeMoon.current,
+        { opacity: 0, y: "-100vh" },
+        { type: "spring", duration: 2, stiffness: 50 }
+      );
+    }
+
+    // await animate(scope.current, { rotate: 0, x: 0, opacity: 0 });
+    // await animate(scope.current, { rotate: 0, x: 0, opacity: 0 });
+  };
   return (
-    <div className="h-screen relative w-full bg-[#00010a] flex flex-col items-center justify-center overflow-hidden rounded-md">
-      {/* <div className="w-full absolute inset-0 h-screen">
-        <SparklesCore
-          id="tsparticlesfullpage"
-          background="opaque"
-          minSize={0.6}
-          maxSize={1.4}
-          particleDensity={100}
-          className="w-full h-full"
-          particleColor="#FFFFFF"
+    <div
+      className={`${
+        phase ? "day" : "night"
+      } w-screen h-screen flex flex-col justify-center overflow-hidden pl-12 relative`}
+    >
+      <div className="absolute left-0 top-0 bottom-0 right-0">
+        <Starfield
+          starCount={1000}
+          starColor={[255, 255, 255]}
+          speedFactor={0.05}
+          backgroundColor="black"
         />
-      </div> */}
-      {/* <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
-        Build great products
-      </h1> */}
-      <div className="bg-black w-[95vw] h-[95vh] bg-tran flex justify-center  items-center">
-        <div className=" w-[100%]  h-full flex flex-col  items-center justify-center gap-2 ">
-          <div className="h-[45%] border border-slate-600   w-[80vw] flex gap-32 justify-center  items-center relative bg-[#040101] rounded-md  ">
-            <h1 className=" absolute top-0 left-0 p-1 text-slate-800 font-medium bg-gray-100 w-max px-2 py-1 ">
-              Living room
-            </h1>
-            <div className="tempchartt  w-[320px] h-[220px] flex justify-center bg-black rounded-md   ">
-              {" "}
-              <Chart
-                options={chartptions.options}
-                series={chartptions.series}
-                type="radialBar"
-                height={"100%"}
+      </div>
+      <div className={`  w-full h-[50%] relative `}>
+        <div
+          className={`absolute ${
+            phase ? "text-slate-800" : "text-slate-100"
+          }   mt-20`}
+        >
+          <p className=" text-normal font-semibold ">Hello</p>
+          <h2 className="   text-2xl font-semibold">Abhishek</h2>
+        </div>
+        <div className="absolute w-[270px] right-8 md:right-28   sm:right-20  h-full">
+          <div className=" absolute w-full b flex flex-col justify-center items-center">
+            <div className=" w-full flex justify-start">
+              <motion.img
+                initial={{
+                  x: phase ? "100vw" : 0,
+                  opacity: phase ? 0 : 1,
+                  y: "140px",
+                }}
+                className="  w-32 h-32 z-10"
+                src="./cloud.svg"
+                alt=""
+                ref={scope}
               />
             </div>
-            <div className="tempchart w-[320px] h-[220px] flex justify-center bg-black rounded-md ">
-              <Chart
-                options={humidityoptions.options}
-                series={humidityoptions.series}
-                type="radialBar"
-                height={"100%"}
+            <div className=" w-full flex justify-center">
+              <motion.img
+                initial={{ y: phase ? "-100vh" : 0, opacity: phase ? 0 : 1 }}
+                className=" w-32 h-32 "
+                src="./moon.png"
+                alt=""
+                ref={scopeMoon}
+              />
+            </div>
+            <div className=" w-full flex justify-end">
+              <motion.img
+                initial={{
+                  x: phase ? "-100vw" : 0,
+                  opacity: phase ? 0 : 1,
+                  y: "-110px",
+                }}
+                className=" w-32 h-32 "
+                src="./cloud.svg"
+                alt=""
+                ref={scopesec}
               />
             </div>
           </div>
-          <div className=" h-[45%] border border-slate-500 flex items-center gap-4 w-[80vw]  justify-center bg-[#0b0202] rounded-md p-2 relative ">
-            <h1 className=" absolute top-0 left-0 p-1 text-slate-800 font-medium bg-cyan-200 w-max px-2 py-1 ">
-              Your Devices
-            </h1>
-            <div className=" w-[400px] h-[250px] bg-[#208289] flex flex-col justify-start items-between rounded-md my-1 border border-slate-300">
-              <div className=" w-full flex justify-center">
-                {" "}
-                <img
-                  className=" w-[200px] h-[200px]"
-                  src="./monitor.png"
-                  alt=""
-                />
-              </div>
-
-              <div className=" flex justify-between items-center px-4">
-                <h1 className=" font-medium text-slate-200">Desktop</h1>
-                <Switch defaultSelected aria-label="Automatic updates" />
-              </div>
+          <div className="absolute w-full b flex flex-col justify-center items-center">
+            <div className=" w-full flex justify-start">
+              <motion.img
+                initial={{
+                  x: phase ? 0 : "100vw",
+                  opacity: phase ? 1 : 0,
+                  y: "170px",
+                }}
+                className=" w-32 h-32 z-10"
+                src="./whitecloud.svg"
+                alt=""
+                ref={scopen}
+              />
             </div>
-            <div className=" w-[400px] h-[250px] bg-[#113e57] flex flex-col justify-start items-between rounded-md border border-slate-300">
-              <div className=" w-full flex justify-center">
-                {" "}
-                <img
-                  className="lamp w-[200px] h-[200px]"
-                  src="./lamp.png"
-                  alt=""
-                />
-              </div>
-
-              <div className=" flex justify-between items-center px-4">
-                <h1 className="font-medium text-slate-200">Lamp</h1>
-                <Switch defaultSelected aria-label="Automatic updates" />
-              </div>
+            <div className=" w-full flex justify-center">
+              <motion.img
+                initial={{ opacity: phase ? 1 : 0, y: phase ? 0 : "100vh" }}
+                className=" w-48 h-32 "
+                src="./sun.png"
+                alt=""
+                ref={scopeSun}
+              />
+            </div>
+            <div className=" w-full flex justify-end">
+              <motion.img
+                initial={{
+                  x: phase ? 0 : "-100vw",
+                  opacity: phase ? 1 : 0,
+                  y: "-100px",
+                }}
+                className=" w-32 h-32"
+                src="./whitecloud.svg"
+                alt=""
+                ref={scopesecn}
+              />
             </div>
           </div>
         </div>
-        {/* <div className=" min-w-[350px] w-[20%] h-full bg-black rounded-md overflow-hidden mr-4  ">
-          <div className=" h-10 bg-gray-900 w-full flex justify-between items-center px-4">
-            <h1>Timer</h1>
-            <Switch defaultSelected aria-label="Automatic updates" />
-          </div>
-          <div className=" flex justify-between items-center w-full px-4 mt-4 ">
-            <div className="">
-              <h1 className=" text-white"> Select Device</h1>
+      </div>
+      <motion.div className=" absolute top-0 right-[100px] w-max flex flex-col justify-center items-center z-20 ">
+        <div className=" w-1 h-[80vh] bg-gray-400"></div>
+        <div className="rotate-90">
+          <FormGroup>
+            <IOSSwitch
+              sx={{ m: 1 }}
+              checked={phase}
+              value={phase}
+              onChange={(e) => setphase(!phase)}
+            />
+          </FormGroup>
+        </div>
+      </motion.div>
+      <div className="h-[50%] w-full flex gap-5">
+        <div className=" w-[20%] min-w-[215px] flex flex-col justify-start">
+          <div className=" w-max flex">
+            <div className=" flex justify-center items-center">
+              <div className="flex justify-center items-center bg-red-800 p-2 rounded-md">
+                <DeviceThermostatIcon sx={{ color: "#ed6f5f" }} />
+              </div>
+              <div className=" ml-1">
+                <p className=" text-slate-400 font-medium text-sm">
+                  Temperature
+                </p>
+                <h4 className=" text-2xl font-semibold text-slate-300">27°C</h4>
+              </div>
             </div>
-            <div className="">
-              <FormControl
-                sx={{
-                  m: 1,
-                  minWidth: 120,
-                  border: "1px solid white",
-                  color: "white",
-                  borderRadius: "5px",
-                }}
-                size="small"
+            <div className="flex justify-center items-center ml-2">
+              <div className="flex justify-center items-center bg-slate-600 p-2 rounded-md">
+                <WaterDropIcon sx={{ color: "#27aef2" }} />
+              </div>
+              <div className=" text-slate-600 font-medium text-sm ml-1">
+                <p className=" text-slate-400 font-medium text-sm">Humidity</p>
+                <h4 className=" text-2xl font-semibold text-slate-300">90%</h4>
+              </div>
+            </div>
+          </div>
+
+          <h1
+            className={` text-4xl mt-9 font-bold ${
+              !phase ? "text-white" : "text-black"
+            }`}
+          >
+            Living Room
+          </h1>
+          <p className=" text-lg font-medium text-slate-300 mt-4 ">
+            {phase ? "Lights are on" : "Lights are off"}
+          </p>
+          <button
+            onClick={() => setshow(!show)}
+            className=" min-[850px]:hidden font-medium z-40  mt-4 hover:cursor-pointer hover:scale-105 rounded-md transition duration-150 flex justify-center items-center bg-black text-white w-max py-2  px-2"
+          >
+            <DevicesIcon sx={{ marginRight: "10px" }} /> My Devices
+          </button>
+        </div>
+
+        <div className=" devices min-w-[550px] w-[45%] h-[90%] flex items-center gap-10  rounded-md ml-12 p-14 relative">
+          <h2
+            className={` ${
+              phase ? "text-slate-700" : "text-slate-200"
+            }  font-semibold text-xl absolute top-2 left-2`}
+          >
+            Devices
+          </h2>
+          <div
+            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
+              phase ? "daycard" : "nightcard"
+            }`}
+          >
+            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
+              <h4
+                className={`${
+                  phase ? "text-slate-700" : "text-slate-200"
+                } font-medium`}
               >
-                <InputLabel
-                  id="demo-select-small-label "
-                  sx={{ color: "white" }}
-                >
-                  Devices
-                </InputLabel>
-                <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={selecteddevice}
-                  label="Devices"
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  <MenuItem selected value={selecteddevice}>
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={"Desktop"}>Desktop</MenuItem>
-                  <MenuItem value={"Lamp"}>Lamp</MenuItem>
-                </Select>
-              </FormControl>
+                Desktop
+              </h4>
+              <Switch style={{ color: "white" }} />
+            </div>
+            <div
+              className={`
+              icon w-full h-[80%] flex justify-center items-center ${
+                phase ? "text-[#1f1f20]" : "text-slate-200"
+              } `}
+            >
+              <ComputerIcon sx={{ fontSize: "4rem" }} />
             </div>
           </div>
-          {currentdevice.length !== 0 && (
-            <div className=" bg-black py-2">
-              <div className=" flex gap-4 items-center px-4">
-                <h1>Active timer</h1>
-                <div className="">
-                  {currentdevice.starttime} - {currentdevice.endtime}
-                </div>
-              </div>
-              <div className=" flex justify-between gap-4 mr-4 items-center px-4">
-                <div className="">
-                  <h1> Select Time</h1>
-                </div>
-                <div className=" flex  justify-center w-max ">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        border: "1px solid white",
-                        width: "100px",
-                      }}
-                    >
-                      <MobileTimePicker
-                        onChange={(e) => handlestarttime(e)}
-                        sx={{
-                          width: "100px",
-                        }}
-                        defaultValue={dayjs("2022-04-17T15:30")}
-                      />
-                    </Box>
-                  </LocalizationProvider>
-                </div>
-                <div className=" flex  justify-center ">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        border: "1px solid white",
-                        width: "100px",
-                      }}
-                    >
-                      <MobileTimePicker
-                        onChange={(e) => handleendtime(e)}
-                        defaultValue={dayjs("2022-04-17T15:30")}
-                      />
-                    </Box>
-                  </LocalizationProvider>
-                </div>
-              </div>
-              <div className=" w-full flex justify-center items-center">
-                <button
-                  onClick={() => changetime()}
-                  className=" bg-cyan-500 w-max px-2 py-1"
-                >
-                  Save
-                </button>
-              </div>
+          <div
+            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
+              phase ? "daycard" : "nightcard"
+            }`}
+          >
+            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
+              <h4
+                className={`${
+                  phase ? "text-slate-700" : "text-slate-200"
+                } font-medium`}
+              >
+                Fan
+              </h4>
+              <Switch />
             </div>
-          )}
-        </div> */}
+            <div
+              className={`
+                icon w-full h-[80%] flex justify-center items-center ${
+                  phase ? "text-[#1f1f20]" : "text-slate-200"
+                } `}
+            >
+              <PiFanFill fontSize={"4rem"} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className={`${
+          show ? "show" : "hide"
+        } absolute bottom-0 left-0 right-0 mobile_device h-[350px] z-50 flex justify-center items-center `}
+      >
+        <div
+          className=" absolute right-2 top-2 text-white hover:cursor-pointer "
+          onClick={() => setshow(!show)}
+        >
+          <CloseIcon />
+        </div>
+        <h2 className=" text-slate-200 font-semibold text-xl absolute top-2 left-2">
+          Devices
+        </h2>
+        <div className=" min-w-[550px] w-[45%] h-[90%] flex items-center gap-10  rounded-md ml-12 p-14 relative">
+          <div
+            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
+              phase ? "daycard" : "nightcard"
+            }`}
+          >
+            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
+              <h4
+                className={`${
+                  phase ? "text-slate-700" : "text-slate-200"
+                } font-medium`}
+              >
+                Desktop
+              </h4>
+              <Switch style={{ color: "white" }} />
+            </div>
+            <div
+              className={`
+              icon w-full h-[80%] flex justify-center items-center ${
+                phase ? "text-[#1f1f20]" : "text-slate-200"
+              } `}
+            >
+              <ComputerIcon sx={{ fontSize: "4rem" }} />
+            </div>
+          </div>
+          <div
+            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
+              phase ? "daycard" : "nightcard"
+            }`}
+          >
+            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
+              <h4
+                className={`${
+                  phase ? "text-slate-700" : "text-slate-200"
+                } font-medium`}
+              >
+                Fan
+              </h4>
+              <Switch />
+            </div>
+            <div
+              className={`
+                icon w-full h-[80%] flex justify-center items-center ${
+                  phase ? "text-[#1f1f20]" : "text-slate-200"
+                } `}
+            >
+              <PiFanFill fontSize={"4rem"} />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Iot;
