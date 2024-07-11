@@ -195,7 +195,7 @@ const Iot = () => {
             phase ? "text-slate-800" : "text-slate-100"
           }   mt-20`}
         >
-          <p className=" text-normal font-semibold ">Hello</p>
+          <p className=" text-normal font-semibold ">Welcome</p>
           <h2 className="   text-2xl font-semibold">Abhishek</h2>
         </div>
         <div className="absolute w-[270px] right-8 md:right-28   sm:right-20  h-full">
@@ -331,7 +331,7 @@ const Iot = () => {
           </button>
         </div>
 
-        <div className=" devices min-w-[550px] w-[45%] h-[90%] flex items-center gap-10  rounded-md ml-12 p-14 relative">
+        <div className=" devices min-w-[550px] w-[45%] h-[90%] flex justify-center items-center gap-10  rounded-md ml-12 p-14 relative">
           <h2
             className={` ${
               phase ? "text-slate-700" : "text-slate-200"
