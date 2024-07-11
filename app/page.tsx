@@ -81,7 +81,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
 }));
 
 const Iot = () => {
-  const [phase, setphase] = useState<boolean>(true);
+  const [phase, setphase] = useState<boolean>(false);
   const [scope, animate] = useAnimate();
   const [scopesec, animatesec] = useAnimate();
   const [scopen, animaten] = useAnimate();
@@ -89,12 +89,17 @@ const Iot = () => {
   const [scopeMoon, animateMoon] = useAnimate();
   const [scopeSun, animateSun] = useAnimate();
   const [show, setshow] = useState(false);
-  useEffect(() => {
-    switchon();
-    lightcontrol();
-  }, [phase]);
-  const lightcontrol = async () => {
-    if (phase) {
+  // useEffect(() => {
+  //   switchon();
+  //   lightcontrol();
+  // }, [phase]);
+  const changephase = () => {
+    switchon(!phase);
+    setphase(!phase);
+    lightcontrol(!phase);
+  };
+  const lightcontrol = async (mode: boolean) => {
+    if (mode) {
       const res = await axios.get("https://awsiot.onrender.com/on");
       console.log(res);
     } else {
@@ -102,8 +107,8 @@ const Iot = () => {
       console.log(res);
     }
   };
-  const switchon = async () => {
-    if (!phase) {
+  const switchon = async (mode: boolean) => {
+    if (!mode) {
       animate(
         scope.current,
         { rotate: 0, x: 0, opacity: 1 },
@@ -174,7 +179,7 @@ const Iot = () => {
     <div
       className={`${
         phase ? "day" : "night"
-      } w-screen h-screen flex flex-col justify-center overflow-hidden pl-12 relative`}
+      } w-screen h-screen flex flex-col justify-center overflow-hidden max-[500px]:pl-6 pl-12 relative`}
     >
       <div className="absolute left-0 top-0 bottom-0 right-0">
         <Starfield
@@ -270,7 +275,7 @@ const Iot = () => {
           </div>
         </div>
       </div>
-      <motion.div className=" absolute top-0 right-[100px] w-max flex flex-col justify-center items-center z-20 ">
+      <motion.div className=" absolute top-0  max-[480px]:right-[50px] right-[100px] w-max flex flex-col justify-center items-center z-20 ">
         <div className=" w-1 h-[80vh] bg-gray-400"></div>
         <div className="rotate-90">
           <FormGroup>
@@ -278,7 +283,7 @@ const Iot = () => {
               sx={{ m: 1 }}
               checked={phase}
               value={phase}
-              onChange={(e) => setphase(!phase)}
+              onChange={(e) => changephase()}
             />
           </FormGroup>
         </div>
