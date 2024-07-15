@@ -100,10 +100,10 @@ const Iot = () => {
   };
   const lightcontrol = async (mode: boolean) => {
     if (mode) {
-      const res = await axios.get("https://awsiot.onrender.com/on");
+      const res = await axios.get("https://iot-ff96.onrender.com/on");
       console.log(res);
     } else {
-      const res = await axios.get("https://awsiot.onrender.com/off");
+      const res = await axios.get("https://iot-ff96.onrender.com/off");
       console.log(res);
     }
   };
