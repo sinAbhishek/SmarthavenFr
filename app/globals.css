@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -15,7 +15,10 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+.montserrat{
+  font-family: var(--font-montserrat);
+  font-weight: 600;
+}
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -50,6 +53,8 @@ color: white !important;
 .day{
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 50%, rgba(240,193,126,1)100%);
+  /* background: rgb(242,242,242);
+  background: linear-gradient(0deg, rgba(242,242,242,1) 0%, rgba(68,137,237,1) 100%); */
 }
 .night{
   background: rgb(51,51,51);

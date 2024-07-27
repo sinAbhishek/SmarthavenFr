@@ -99,13 +99,13 @@ const Iot = () => {
     lightcontrol(!phase);
   };
   const lightcontrol = async (mode: boolean) => {
-    if (mode) {
-      const res = await axios.get("https://awsiot.onrender.com/on");
-      console.log(res);
-    } else {
-      const res = await axios.get("https://awsiot.onrender.com/off");
-      console.log(res);
-    }
+    // if (mode) {
+    //   const res = await axios.get("https://awsiot.onrender.com/on");
+    //   console.log(res);
+    // } else {
+    //   const res = await axios.get("https://awsiot.onrender.com/off");
+    //   console.log(res);
+    // }
   };
   const switchon = async (mode: boolean) => {
     if (!mode) {
@@ -314,7 +314,7 @@ const Iot = () => {
           </div>
 
           <h1
-            className={` text-4xl mt-9 font-bold ${
+            className={`montserrat text-4xl mt-9 font-bold ${
               !phase ? "text-white" : "text-black"
             }`}
           >
