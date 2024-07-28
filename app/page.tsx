@@ -101,12 +101,12 @@ const Iot = () => {
   const lightcontrol = async (mode: boolean) => {
     if (mode) {
       const res = await axios.get(
-        "IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/on"
+        "https://IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/on"
       );
       console.log(res);
     } else {
       const res = await axios.get(
-        "IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/off"
+        "https://IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/off"
       );
       console.log(res);
     }
