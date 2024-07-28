@@ -23,6 +23,7 @@ import SwitchMain, { SwitchProps } from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
+import Devices from "@/components/Devices";
 const IOSSwitch = styled((props: SwitchProps) => (
   <SwitchMain
     focusVisibleClassName=".Mui-focusVisible"
@@ -334,69 +335,14 @@ const Iot = () => {
             <DevicesIcon sx={{ marginRight: "10px" }} /> My Devices
           </button>
         </div>
-
-        <div className=" devices min-w-[550px] w-[45%] h-[90%] flex justify-center items-center gap-10  rounded-md ml-12 p-14 relative">
-          <h2
-            className={` ${
-              phase ? "text-slate-700" : "text-slate-200"
-            }  font-semibold text-xl absolute top-2 left-2`}
-          >
-            Devices
-          </h2>
-          <div
-            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
-              phase ? "daycard" : "nightcard"
-            }`}
-          >
-            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
-              <h4
-                className={`${
-                  phase ? "text-slate-700" : "text-slate-200"
-                } font-medium`}
-              >
-                Desktop
-              </h4>
-              <Switch style={{ color: "white" }} />
-            </div>
-            <div
-              className={`
-              icon w-full h-[80%] flex justify-center items-center ${
-                phase ? "text-[#1f1f20]" : "text-slate-200"
-              } `}
-            >
-              <ComputerIcon sx={{ fontSize: "4rem" }} />
-            </div>
-          </div>
-          <div
-            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
-              phase ? "daycard" : "nightcard"
-            }`}
-          >
-            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
-              <h4
-                className={`${
-                  phase ? "text-slate-700" : "text-slate-200"
-                } font-medium`}
-              >
-                Fan
-              </h4>
-              <Switch />
-            </div>
-            <div
-              className={`
-                icon w-full h-[80%] flex justify-center items-center ${
-                  phase ? "text-[#1f1f20]" : "text-slate-200"
-                } `}
-            >
-              <PiFanFill fontSize={"4rem"} />
-            </div>
-          </div>
+        <div className=" devicescontainer ml-12 w-full h-full">
+          <Devices />
         </div>
       </div>
       <div
         className={`${
           show ? "show" : "hide"
-        } absolute bottom-0 left-0 right-0 mobile_device h-[350px] z-50 flex justify-center items-center `}
+        } absolute bottom-0 left-0 right-0 mobile_device h-[350px] w-screen z-50 flex justify-center items-center `}
       >
         <div
           className=" absolute right-2 top-2 text-white hover:cursor-pointer "
@@ -404,59 +350,8 @@ const Iot = () => {
         >
           <CloseIcon />
         </div>
-        <h2 className=" text-slate-200 font-semibold text-xl absolute top-2 left-2">
-          Devices
-        </h2>
-        <div className=" min-w-[550px] w-[45%] h-[90%] flex items-center gap-10  rounded-md ml-12 p-14 relative">
-          <div
-            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
-              phase ? "daycard" : "nightcard"
-            }`}
-          >
-            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
-              <h4
-                className={`${
-                  phase ? "text-slate-700" : "text-slate-200"
-                } font-medium`}
-              >
-                Desktop
-              </h4>
-              <Switch style={{ color: "white" }} />
-            </div>
-            <div
-              className={`
-              icon w-full h-[80%] flex justify-center items-center ${
-                phase ? "text-[#1f1f20]" : "text-slate-200"
-              } `}
-            >
-              <ComputerIcon sx={{ fontSize: "4rem" }} />
-            </div>
-          </div>
-          <div
-            className={` cards w-[200px] h-[200px] bg-gray-700 rounded-md flex flex-col justify-between relative ${
-              phase ? "daycard" : "nightcard"
-            }`}
-          >
-            <div className=" absolute bottom-4 w-full flex justify-between mx-2 px-2 items-center">
-              <h4
-                className={`${
-                  phase ? "text-slate-700" : "text-slate-200"
-                } font-medium`}
-              >
-                Fan
-              </h4>
-              <Switch />
-            </div>
-            <div
-              className={`
-                icon w-full h-[80%] flex justify-center items-center ${
-                  phase ? "text-[#1f1f20]" : "text-slate-200"
-                } `}
-            >
-              <PiFanFill fontSize={"4rem"} />
-            </div>
-          </div>
-        </div>
+
+        <Devices />
       </div>
     </div>
   );

@@ -95,7 +95,7 @@ background: linear-gradient(0deg, rgba(26,26,26,1) 5%, rgba(0,0,0,1) 90%, rgba(0
 }
 @media only screen and (max-width:850px) {
 
-  .devices{
+  .devicescontainer{
     display: none;
   }
 }
