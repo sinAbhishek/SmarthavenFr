@@ -6,7 +6,7 @@ import { PiFanFill } from "react-icons/pi";
 const Devices = () => {
   const [phase, setphase] = useState<boolean>(false);
   return (
-    <div className=" devices min-w-[550px] w-[45%] h-[90%] flex justify-center items-center gap-10  rounded-md  p-14 relative">
+    <div className=" devices min-w-[550px] w-[65%] h-[90%] flex justify-center items-center gap-10  rounded-md  p-14 relative">
       <h2
         className={` ${
           phase ? "text-slate-700" : "text-slate-200"

@@ -1,28 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  delay,
-  useAnimate,
-  usePresence,
-  stagger,
-  useTransform,
-} from "framer-motion";
-import { Switch } from "@nextui-org/switch";
+import { useAnimate } from "framer-motion";
 import axios from "axios";
 import Starfield from "@/components/Starfield";
 import { motion } from "framer-motion";
 import { styled } from "@mui/material/styles";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import FormGroup from "@mui/material/FormGroup";
-import ComputerIcon from "@mui/icons-material/Computer";
-import { PiFanFill } from "react-icons/pi";
 import DevicesIcon from "@mui/icons-material/Devices";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import SwitchMain, { SwitchProps } from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import Devices from "@/components/Devices";
 const IOSSwitch = styled((props: SwitchProps) => (
   <SwitchMain
@@ -90,10 +78,6 @@ const Iot = () => {
   const [scopeMoon, animateMoon] = useAnimate();
   const [scopeSun, animateSun] = useAnimate();
   const [show, setshow] = useState(false);
-  // useEffect(() => {
-  //   switchon();
-  //   lightcontrol();
-  // }, [phase]);
   const changephase = () => {
     switchon(!phase);
     setphase(!phase);
@@ -101,14 +85,10 @@ const Iot = () => {
   };
   const lightcontrol = async (mode: boolean) => {
     if (mode) {
-      const res = await axios.get(
-        "http://IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/on"
-      );
+      const res = await axios.get("https://iot-ff96.onrender.com/on");
       console.log(res);
     } else {
-      const res = await axios.get(
-        "http://IotBackendNew-env.eba-x34xtbim.ap-south-1.elasticbeanstalk.com/off"
-      );
+      const res = await axios.get("https://iot-ff96.onrender.com/off");
       console.log(res);
     }
   };
@@ -176,9 +156,6 @@ const Iot = () => {
         { type: "spring", duration: 2, stiffness: 50 }
       );
     }
-
-    // await animate(scope.current, { rotate: 0, x: 0, opacity: 0 });
-    // await animate(scope.current, { rotate: 0, x: 0, opacity: 0 });
   };
   return (
     <div
@@ -294,7 +271,7 @@ const Iot = () => {
         </div>
       </motion.div>
       <div className="h-[50%] w-full flex gap-5">
-        <div className=" w-[20%] min-w-[215px] flex flex-col justify-start">
+        <div className=" w-[20%] min-w-[245px] flex flex-col justify-start">
           <div className=" w-max flex">
             <div className=" flex justify-center items-center">
               <div className="flex justify-center items-center bg-red-800 p-2 rounded-md">
@@ -335,7 +312,7 @@ const Iot = () => {
             <DevicesIcon sx={{ marginRight: "10px" }} /> My Devices
           </button>
         </div>
-        <div className=" devicescontainer ml-12 w-full h-full">
+        <div className=" devicescontainer ml-12 w-[70%] h-full ">
           <Devices />
         </div>
       </div>
