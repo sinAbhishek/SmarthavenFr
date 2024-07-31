@@ -77,12 +77,21 @@ const Iot = () => {
   const [scopesecn, animatesecn] = useAnimate();
   const [scopeMoon, animateMoon] = useAnimate();
   const [scopeSun, animateSun] = useAnimate();
+  const [dhtdata, setdhtdata] = useState({ temperature: 32.8, humidity: 98 });
   const [show, setshow] = useState(false);
   const changephase = () => {
     switchon(!phase);
     setphase(!phase);
     lightcontrol(!phase);
   };
+  useEffect(() => {
+    (async function () {
+      const res = await axios.get(
+        "https://iot-ff96.onrender.com/temperature_humidity"
+      );
+      setdhtdata(res.data);
+    })();
+  }, []);
   const lightcontrol = async (mode: boolean) => {
     if (mode) {
       const res = await axios.get("https://iot-ff96.onrender.com/on");
@@ -281,7 +290,9 @@ const Iot = () => {
                 <p className=" text-slate-400 font-medium text-sm">
                   Temperature
                 </p>
-                <h4 className=" text-2xl font-semibold text-slate-300">27°C</h4>
+                <h4 className=" text-2xl font-semibold text-slate-300">
+                  {dhtdata.temperature}°C
+                </h4>
               </div>
             </div>
             <div className="flex justify-center items-center ml-2">
@@ -290,7 +301,9 @@ const Iot = () => {
               </div>
               <div className=" text-slate-600 font-medium text-sm ml-1">
                 <p className=" text-slate-400 font-medium text-sm">Humidity</p>
-                <h4 className=" text-2xl font-semibold text-slate-300">90%</h4>
+                <h4 className=" text-2xl font-semibold text-slate-300">
+                  {dhtdata.humidity}%
+                </h4>
               </div>
             </div>
           </div>
