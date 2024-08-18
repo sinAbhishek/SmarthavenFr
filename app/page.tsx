@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useAnimate } from "framer-motion";
 import axios from "axios";
 import Starfield from "@/components/Starfield";
+import { MdOutlineSchedule } from "react-icons/md";
 import { motion } from "framer-motion";
 import { styled } from "@mui/material/styles";
+import toast, { Toaster } from "react-hot-toast";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import FormGroup from "@mui/material/FormGroup";
 import DevicesIcon from "@mui/icons-material/Devices";
@@ -12,6 +14,7 @@ import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import SwitchMain, { SwitchProps } from "@mui/material/Switch";
 import CloseIcon from "@mui/icons-material/Close";
 import Devices from "@/components/Devices";
+import Scheduler from "@/components/Scheduler";
 const IOSSwitch = styled((props: SwitchProps) => (
   <SwitchMain
     focusVisibleClassName=".Mui-focusVisible"
@@ -72,6 +75,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
 const Iot = () => {
   const [phase, setphase] = useState<boolean>(false);
   const [scope, animate] = useAnimate();
+  const [open, setopen] = useState(false);
   const [scopesec, animatesec] = useAnimate();
   const [scopen, animaten] = useAnimate();
   const [scopesecn, animatesecn] = useAnimate();
@@ -83,6 +87,10 @@ const Iot = () => {
     switchon(!phase);
     setphase(!phase);
     lightcontrol(!phase);
+  };
+  const notify = () => {
+    toast.success("Settings saved");
+    setopen(false);
   };
   useEffect(() => {
     (async function () {
@@ -172,6 +180,7 @@ const Iot = () => {
         phase ? "day" : "night"
       } w-screen h-screen flex flex-col justify-center overflow-hidden max-[500px]:pl-6 pl-12 relative`}
     >
+      <Toaster />
       <div className="absolute left-0 top-0 bottom-0 right-0">
         <Starfield
           starCount={1000}
@@ -186,7 +195,7 @@ const Iot = () => {
             phase ? "text-slate-800" : "text-slate-100"
           }   mt-20`}
         >
-          <p className=" text-normal font-semibold ">Welcome</p>
+          <p className=" font-semibold ">Welcome</p>
           <h2 className="   text-2xl font-semibold">Abhishek</h2>
         </div>
         <div className="absolute w-[270px] right-8 md:right-28   sm:right-20  h-full">
@@ -287,10 +296,18 @@ const Iot = () => {
                 <DeviceThermostatIcon sx={{ color: "#ed6f5f" }} />
               </div>
               <div className=" ml-1">
-                <p className=" text-slate-400 font-medium text-sm">
+                <p
+                  className={`  font-medium text-sm ${
+                    !phase ? "text-white" : "text-slate-600"
+                  }`}
+                >
                   Temperature
                 </p>
-                <h4 className=" text-2xl font-semibold text-slate-300">
+                <h4
+                  className={` text-2xl font-semibold    ${
+                    !phase ? "text-slate-400" : "text-slate-400"
+                  }`}
+                >
                   {dhtdata.temperature}°C
                 </h4>
               </div>
@@ -300,8 +317,18 @@ const Iot = () => {
                 <WaterDropIcon sx={{ color: "#27aef2" }} />
               </div>
               <div className=" text-slate-600 font-medium text-sm ml-1">
-                <p className=" text-slate-400 font-medium text-sm">Humidity</p>
-                <h4 className=" text-2xl font-semibold text-slate-300">
+                <p
+                  className={`  font-medium text-sm ${
+                    !phase ? "text-white" : "text-slate-600"
+                  }`}
+                >
+                  Humidity
+                </p>
+                <h4
+                  className={` text-2xl font-semibold    ${
+                    !phase ? "text-slate-400" : "text-slate-400"
+                  }`}
+                >
                   {dhtdata.humidity}%
                 </h4>
               </div>
@@ -315,9 +342,20 @@ const Iot = () => {
           >
             Living Room
           </h1>
-          <p className=" text-lg font-medium text-slate-300 mt-4 ">
+          <p
+            className={` text-lg font-semibold  mt-4 ${
+              !phase ? "text-slate-100" : "text-slate-600"
+            } `}
+          >
             {phase ? "Lights are on" : "Lights are off"}
           </p>
+          <button
+            onClick={() => setopen(!open)}
+            className="   font-medium z-40  mt-4 hover:cursor-pointer hover:scale-105 rounded-md transition duration-150 flex justify-center items-center bg-black text-white w-max py-2  px-2"
+          >
+            <MdOutlineSchedule size={"1.5rem"} />{" "}
+            <span className=" ml-2">Schedule</span>
+          </button>
           <button
             onClick={() => setshow(!show)}
             className=" min-[850px]:hidden font-medium z-40  mt-4 hover:cursor-pointer hover:scale-105 rounded-md transition duration-150 flex justify-center items-center bg-black text-white w-max py-2  px-2"
@@ -326,7 +364,7 @@ const Iot = () => {
           </button>
         </div>
         <div className=" devicescontainer ml-12 w-[70%] h-full ">
-          <Devices />
+          <Devices phase={phase} />
         </div>
       </div>
       <div
@@ -342,6 +380,13 @@ const Iot = () => {
         </div>
 
         <Devices />
+      </div>
+      <div
+        className={` absolute w-[400px] right-0  bg-[#03070c] h-full flex justify-center items-center z-50 ${
+          open ? "showslide" : "hideslide"
+        } `}
+      >
+        <Scheduler notify={notify} />
       </div>
     </div>
   );

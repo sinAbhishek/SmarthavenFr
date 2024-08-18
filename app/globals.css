@@ -19,6 +19,34 @@
   font-family: var(--font-montserrat);
   font-weight: 600;
 }
+/* #demo-simple-select{
+  color: antiquewhite;
+} */
+.testing{
+  min-width: 100px !important;
+  background-color: aliceblue;
+  color: black;
+ 
+}
+/* .MuiInputBase-root{
+  padding: 0px 0px 0px 12px !important;
+  text-align: center;
+} */
+/* .MuiOutlinedInput-root{
+  color: black !important;
+
+} */
+ .showslide{
+  transform: translateX(0);
+  transition: 0.3s ease-in-out ;
+ }
+ .hideslide{
+  transform: translateX(100%);
+  transition: 0.3s ease-in-out ;
+ }
+.MuiInputBase-input {
+  padding:5px 5px !important;
+}
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -43,10 +71,7 @@ body {
   background: radial-gradient(circle, rgb(40, 2, 6) 20%, rgba(13,13,13,1) 100%);
 }
 
-.MuiOutlinedInput-root{
-color: white !important;
 
-}
 .MuiOutlinedInput-notchedOutline {
   color: white !important;
 }
