@@ -4,7 +4,7 @@ import ComputerIcon from "@mui/icons-material/Computer";
 import { PiFanFill } from "react-icons/pi";
 
 const Devices = ({ phase }: any) => {
-  // const [phase, setphase] = useState<boolean>(false);
+  
   return (
     <div className=" devices min-w-[550px] w-[65%] h-[90%] flex justify-center items-center gap-10  rounded-md  p-14 relative">
       <h2
