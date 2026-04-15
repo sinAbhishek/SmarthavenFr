@@ -32,10 +32,7 @@
   padding: 0px 0px 0px 12px !important;
   text-align: center;
 } */
-/* .MuiOutlinedInput-root{
-  color: black !important;
 
-} */
  .showslide{
   transform: translateX(0);
   transition: 0.3s ease-in-out ;
