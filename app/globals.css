@@ -19,9 +19,7 @@
   font-family: var(--font-montserrat);
   font-weight: 600;
 }
-/* #demo-simple-select{
-  color: antiquewhite;
-} */
+
 .testing{
   min-width: 100px !important;
   background-color: aliceblue;
