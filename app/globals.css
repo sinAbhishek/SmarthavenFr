@@ -70,8 +70,7 @@ body {
 .day{
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 50%, rgba(240,193,126,1)100%);
-  /* background: rgb(242,242,242);
-  background: linear-gradient(0deg, rgba(242,242,242,1) 0%, rgba(68,137,237,1) 100%); */
+ 
 }
 .night{
   background: rgb(51,51,51);
