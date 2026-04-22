@@ -8,7 +8,7 @@ interface Props {
   starColor?: [number, number, number];
   starCount?: number;
 }
-
+// animated stars
 export default function Starfield(props: Props) {
   const {
     speedFactor = 0.05,
