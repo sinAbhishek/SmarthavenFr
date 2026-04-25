@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Switch } from "@nextui-org/switch";
 import ComputerIcon from "@mui/icons-material/Computer";
 import { PiFanFill } from "react-icons/pi";
-
+// all devices
 const Devices = ({ phase }: any) => {
   
   return (
